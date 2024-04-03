@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 const app = express()
 // import connection from './database/database.config';
 import pool from './database/database.config';
+import routers from './apis';
 
 app.use(bodyParser.json())
 
@@ -78,6 +79,8 @@ app.delete('/data/:id', (req, res) => {
     })
 }
 )
+
+app.use('/api', routers);
 
 
 const port = process.env.PORT || 3000

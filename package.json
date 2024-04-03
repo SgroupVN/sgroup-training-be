@@ -5,10 +5,12 @@
   "main": "src/index.js",
   "repository": "git@github.com:linhprovip2002/training-be-sgroup-basic.git",
   "author": "linh",
+  "type": "module",
   "scripts": {
     "build": "babel ./src --out-dir ./build",
     "start": "nodemon --exec babel-node src/index.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "init-db": "node src/database/init.js"
   },
   "license": "MIT",
   "dependencies": {
