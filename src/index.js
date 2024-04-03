@@ -2,9 +2,8 @@ import express from 'express';
 import fs from 'fs';
 import bodyParser from 'body-parser';
 const app = express()
-// import connection from './database/database.config';
-import pool from './database/database.config';
-import routers from './apis';
+
+import routers from './database';
 
 app.use(bodyParser.json())
 
