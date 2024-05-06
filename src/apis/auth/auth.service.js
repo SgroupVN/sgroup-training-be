@@ -1,10 +1,12 @@
 import Database from '../../database/query';
 import UserModel from '../../model/user.model';
 import { hashPassword,hashPasswordSalt } from '../../service';
-class UserService {
+import { UserIdentityService } from '../../service'
+class AuthService {
     constructor() {
         this.db = new Database();
         this.userModel = new UserModel();
+        this.userIdentityService = new UserIdentityService();
     }
 
     // async getAll(username) {
@@ -86,38 +88,25 @@ class UserService {
     //         throw error;
     //     }
     // }
-    async getUsers() {
+    async login(loginDTO) {
         try {
-            const users = this.userModel.getAllUsers();
-            return users;
+            const user = await this.userModel.getUserByUsername(loginDTO.username);
+            if (user == null) {
+                return new Error('User not found');
+            }
+            const password = await hashPasswordSalt(user.SALT, loginDTO.password);
+            if (password !== user.PASSWORD) {
+                console.log('vao day password');
+                return new Error('Invalid password');
+            }
+            console.log('vao day1');
+            const token = await this.userIdentityService.sign(user);
+            return token;
         } catch (error) {
-            console.error('Error fetching all USERS:', error);
-            throw error;
-        }
-    }
-    async getById(id) {
-        try {
-            const user = this.userModel.getUserById(id);
-            return user;
-        } catch (error) {
-            console.error(`Error fetching user with ID ${id}:`, error);
-            throw error;
-        }
-    }
-    async create(user) {
-        try {
-            const { salt , passwordHashed } = hashPassword(user.password);
-            console.log("salt",salt + "passwordHashed",passwordHashed);
-            user.salt = salt;
-            user.password = passwordHashed;
-            user.forgetPasswordToken =passwordHashed;
-            const id = this.userModel.createUser(user);
-            return id;
-        } catch (error) {
-            console.error('Error creating user:', error);
+            console.error('Error logging in:', error);
             throw error;
         }
     }
 }
 
-export default new UserService();
+export default new AuthService();

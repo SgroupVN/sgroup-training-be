@@ -2,14 +2,14 @@ import UserService from './user.service.js';
 class UserController {
     getAllUser = async (req, res, next) => {
         try {
-            const { page, size, username } = req.query;
-            if (page && page > 0) {
-                const users = await UserService.getUserWithPaging(page, size, username);
+            // const { page, size, username } = req.query;
+            // if (page && page > 0) {
+            //     const users = await UserService.getUserWithPaging(page, size, username);
+            //     return res.status(200).json(users);
+            // } else {
+                const users = await UserService.getUsers();
                 return res.status(200).json(users);
-            } else {
-                const users = await UserService.getAll(username);
-                return res.status(200).json(users);
-            }
+            // }
         } catch (error) {
             next(error);
         }
@@ -26,11 +26,12 @@ class UserController {
 
     createNewUser = async (req, res, next) => {
         let newUser = {
-            fullname: req.body.fullname,
+            name: req.body.name,
             gender: req.body.gender,
             age: req.body.age,
+            username: req.body.username,
+            email: req.body.email,
             password: req.body.password,
-            createdBy: req.session.id
         };
         await UserService.create(newUser);
         return res.status(201).json(newUser);

@@ -3,7 +3,7 @@ import pool from "./database.config";
 
 class Database {
   async select(query, params = []) {
-    try {
+    try {UserIdentityService
       const [rows, fields] = await pool.query(query, params);
       return rows;
     } catch (error) {

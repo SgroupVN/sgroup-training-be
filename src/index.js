@@ -3,7 +3,7 @@ import fs from 'fs';
 import bodyParser from 'body-parser';
 const app = express()
 
-import routers from './database';
+import routers from './apis';
 
 app.use(bodyParser.json())
 
