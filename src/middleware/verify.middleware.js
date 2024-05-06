@@ -1,18 +1,19 @@
 
 import jwt from 'jsonwebtoken';
-import { userIdentityService } from '../service';
+import { UserIdentityService } from '../service';
 import env from 'dotenv';
 env.config(); 
 
 
 export default function verify(req , res, next) {
-    const token = req.headers['authorization'];
+    let token = req.headers.authorization;
     if (!token) {
         return res.status(401).json({ message: 'Token is required.' });
     }
+    token = token.split(' ')[1];
     try {
+        const userIdentityService = new UserIdentityService();
         const decoded = userIdentityService.verify(token);
-        console.log('aaa' + decoded);
         userIdentityService.assignUserRequestContext(decoded,req);
         next();
     } catch (error) {
