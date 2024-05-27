@@ -1,9 +1,15 @@
 import express from 'express';
 import fs from 'fs';
 import bodyParser from 'body-parser';
+import pug from 'pug';
 const app = express()
 
 import routers from './apis';
+app.use(express.static(__dirname + '/views'));
+// setting pug
+app.set('view engine', 'pug')
+app.set('views', './src/views')
+
 
 app.use(bodyParser.json())
 
@@ -20,7 +26,9 @@ app.get('/data', (req, res) => {
             res.send('Error reading file', err)
             return
         }
-        res.send(data)
+        res.render('Home/users', {
+            data: JSON.parse(data)
+        })
     })
 })
 
@@ -94,6 +102,16 @@ app.delete('/data/:id', (req, res) => {
 )
 
 app.use('/api', routers);
+
+app.get('/login', (req, res) => {
+    return res.render('login/login', {
+        title: 'Login',
+    }) 
+})
+
+app.get('/hello-pug', (req,res) => {
+    res.render('Home/hello.pug', {name: 'Pug'})
+})
 
 
 const port = process.env.PORT || 3000
