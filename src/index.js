@@ -24,18 +24,32 @@ app.get('/data', (req, res) => {
     })
 })
 
-app.post('/data', (req, res) => {
-    const { id , name } = req.body
-    const data = JSON.stringify({ id, name })
-    fs.writeFile('data.json', data, (err) => {
-        if (err) {
-            res.send('Error writing file', err)
-            return
-        }
-        res.send('Data saved')
-    })
+app.post('/data', (req, res) => { 
+console.log(req.body)
+const newUser = { //req.body luôn
+    id: req.body.id,
+    name: req.body.name
 }
-)
+fs.readFile('data.json', 'utf8', (err, data) => {
+    if (err) {
+    res.send('error reading file', err);
+    return;
+    }
+    console.log(data)
+    const dataUsers = JSON.parse(data);
+    const newData = [...dataUsers, newUser]
+    // console.log('hi',newData)
+    fs.writeFile('data.json', JSON.stringify(newData), (err) => {
+    if (err) {
+        res.send('error writing file', err)
+        return
+    }
+    res.send('Data added')
+    })
+})
+
+})
+
 app.put('/data/:id', (req, res) => {
     const { id } = req.params
     const { name } = req.body
