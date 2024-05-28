@@ -3,15 +3,18 @@ html
   head
     title #{title}
     link(rel='stylesheet', href='/dist/css/style.css')
-
     link(rel='stylesheet', href='/dist/css/bootstrap.min.css')
-    script(src="/dist/js/bootstrap.min.js")
-     script(src="index.js")
+    script(src='/dist/js/bootstrap.min.js')
+    script(src='https://cdn.tailwindcss.com')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
     <script src="https://cdn.tailwindcss.com"></script>
-
+    link(rel="stylesheet", href="/dist/index.js")
+    script(src="/dist/index.js")
     meta(name="viewport" content="width=device-width, initial-scale=1")
   body
     main
         block header
 
         block content
+        
+        block script 
