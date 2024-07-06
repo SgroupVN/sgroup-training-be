@@ -1,11 +1,28 @@
 import express from 'express';
 import fs from 'fs';
 import bodyParser from 'body-parser';
+// import multer from 'multer';
+import uploadStorage from './service/upload.service.js';
+import path from 'path';
 const app = express()
 
 import routers from './apis';
 
 app.use(bodyParser.json())
+
+app.use(express.static(path.join(__dirname, '/public')));
+console.log(path.join(__dirname, '/public'));
+
+// Single file
+app.post("/upload/single", uploadStorage.single("file"), (req, res) => {
+  console.log(req.file)
+  return res.send("Single file")
+})
+//Multiple files
+app.post("/upload/multiple", uploadStorage.array("file", 10), (req, res) => {
+  console.log(req.files)
+  return res.send("Multiple files")
+})
 
 // basic route 
 app.get('/', (req, res) => {
